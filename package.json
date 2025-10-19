@@ -14,18 +14,9 @@
     "db:reset": "prisma migrate reset",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "test": "node test-all.js",
-    "test:quick": "node quick-test.js",
-    "test:functional": "node test-functional.js",
-    "test:interactive": "node test-interactive.js",
-    "test:ui": "node test-ui-elements.js",
-    "test:final": "node test-final.js",
-    "test:system": "node test-system.js",
-    "test:server": "node test-server.js",
     "setup": "npm install && npm run db:generate && npm run db:migrate && npm run db:seed",
     "clean": "rm -rf node_modules package-lock.json .next prisma/dev.db",
-    "fresh": "npm run clean && npm run setup",
-    "check": "npm run test:final && npm run build"
+    "fresh": "npm run clean && npm run setup"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",

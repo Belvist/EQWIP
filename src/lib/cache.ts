@@ -1,21 +1,82 @@
-import Redis from 'ioredis'
+// Простая реализация кэша в памяти (без Redis)
+interface CacheItem {
+  data: any
+  expires: number
+}
 
-// Инициализация Redis клиента
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  maxRetriesPerRequest: 3,
-  lazyConnect: true,
-  connectTimeout: 10000,
-  commandTimeout: 5000,
-})
+class MemoryCache {
+  private cache = new Map<string, CacheItem>()
 
-// Обработка ошибок подключения
-redis.on('error', (err) => {
-  console.error('Redis connection error:', err)
-})
+  async get(key: string): Promise<string | null> {
+    const item = this.cache.get(key)
+    if (!item) return null
+    
+    if (Date.now() > item.expires) {
+      this.cache.delete(key)
+      return null
+    }
+    
+    return item.data
+  }
 
-redis.on('connect', () => {
-  console.log('Connected to Redis')
-})
+  async set(key: string, value: string, ttl: number = 3600): Promise<void> {
+    this.cache.set(key, {
+      data: value,
+      expires: Date.now() + (ttl * 1000)
+    })
+  }
+
+  async setex(key: string, ttl: number, value: string): Promise<void> {
+    this.cache.set(key, {
+      data: value,
+      expires: Date.now() + (ttl * 1000)
+    })
+  }
+
+  async del(key: string): Promise<void> {
+    this.cache.delete(key)
+  }
+
+  async keys(pattern: string): Promise<string[]> {
+    const regex = new RegExp(pattern.replace(/\*/g, '.*'))
+    return Array.from(this.cache.keys()).filter(key => regex.test(key))
+  }
+
+  async incr(key: string): Promise<number> {
+    const current = await this.get(key)
+    const value = current ? parseInt(current) + 1 : 1
+    await this.set(key, value.toString())
+    return value
+  }
+
+  async decr(key: string): Promise<number> {
+    const current = await this.get(key)
+    const value = current ? parseInt(current) - 1 : -1
+    await this.set(key, value.toString())
+    return value
+  }
+
+  async exists(key: string): Promise<number> {
+    return this.cache.has(key) ? 1 : 0
+  }
+
+  async expire(key: string, ttl: number): Promise<void> {
+    const item = this.cache.get(key)
+    if (item) {
+      item.expires = Date.now() + (ttl * 1000)
+    }
+  }
+
+  async ttl(key: string): Promise<number> {
+    const item = this.cache.get(key)
+    if (!item) return -2
+    
+    const remaining = Math.floor((item.expires - Date.now()) / 1000)
+    return remaining > 0 ? remaining : -1
+  }
+}
+
+const redis = new MemoryCache()
 
 // Интерфейс для кэшированных данных
 export interface CacheOptions {

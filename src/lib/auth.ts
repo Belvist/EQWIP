@@ -10,6 +10,16 @@ import { hasTwoFactorMarker, clearTwoFactorMarker } from '@/lib/twofa'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as any,
+  // Отключаем email верификацию
+  events: {
+    createUser: async (message) => {
+      // Автоматически подтверждаем email при создании пользователя
+      await db.user.update({
+        where: { id: message.user.id },
+        data: { emailVerified: new Date() }
+      })
+    }
+  },
   providers: [
     ...(process.env.ENABLE_OAUTH_LOGIN === 'true' && process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? [GoogleProvider({
@@ -23,42 +33,40 @@ export const authOptions: NextAuthOptions = {
           clientSecret: process.env.GITHUB_SECRET,
         })]
       : []),
-    ...(process.env.ENABLE_PASSWORD_LOGIN === 'true'
-      ? [CredentialsProvider({
-          name: "credentials",
-          credentials: {
-            email: { label: "Email", type: "email" },
-            password: { label: "Password", type: "password" }
-          },
-          async authorize(credentials) {
-            if (!credentials?.email || !credentials?.password) {
-              return null
-            }
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null
+        }
 
-            const user = await db.user.findUnique({
-              where: { email: credentials.email },
-              include: { candidateProfile: true, employerProfile: true },
-            })
+        const user = await db.user.findUnique({
+          where: { email: credentials.email },
+          include: { candidateProfile: true, employerProfile: true },
+        })
 
-            if (!user || !user.password) {
-              return null
-            }
+        if (!user || !user.password) {
+          return null
+        }
 
-            const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
-            if (!isPasswordValid) {
-              return null
-            }
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
+        if (!isPasswordValid) {
+          return null
+        }
 
-            return {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-              role: user.role,
-              image: user.avatar,
-            }
-          }
-        })]
-      : [])
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          image: user.avatar,
+        }
+      }
+    })
     ,
     ...(process.env.ENABLE_ADMIN_CREDENTIALS !== 'false'
       ? [CredentialsProvider({

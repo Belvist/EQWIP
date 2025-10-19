@@ -401,10 +401,10 @@ const JobSearchPage = () => {
           <div className="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl flex items-center justify-center overflow-hidden">
             {job.companyLogo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={job.companyLogo.startsWith('/api/') ? job.companyLogo : `/api/profile/company-logo?f=${encodeURIComponent(job.companyLogo)}`} alt={job.companyName} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+              <img src={job.companyLogo?.startsWith('/api/') ? job.companyLogo : `/api/profile/company-logo?f=${encodeURIComponent(job.companyLogo || '')}`} alt={job.companyName || 'Логотип компании'} className="w-full h-full object-cover" loading="lazy" decoding="async" />
             ) : (
               <span className="text-xl font-bold text-gray-700 dark:text-gray-300">
-                {job.companyName.charAt(0)}
+                {job.companyName?.charAt(0) || '?'}
               </span>
             )}
           </div>
@@ -412,7 +412,7 @@ const JobSearchPage = () => {
             <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-1">
               {job.title}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">{job.companyName}</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">{job.companyName || 'Неизвестная компания'}</p>
           </div>
         </div>
         <button
@@ -449,12 +449,12 @@ const JobSearchPage = () => {
         </div>
 
         <div className="flex flex-wrap gap-2 mb-4">
-          {job.skills.slice(0, 4).map((skill, index) => (
+          {job.skills?.slice(0, 4).map((skill, index) => (
             <span key={index} className="inline-flex items-center rounded-full border border-transparent bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 px-2.5 py-0.5 text-xs font-semibold">
               {skill}
             </span>
           ))}
-          {job.skills.length > 4 && (
+          {job.skills && job.skills.length > 4 && (
             <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold text-foreground">
               +{job.skills.length - 4}
             </span>

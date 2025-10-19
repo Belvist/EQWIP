@@ -509,9 +509,9 @@ export default function ProfilePage() {
               </Card>
             </div>
           </div>
+        </div>
         </main>
         <Footer />
       </div>
     )
-  )
 }

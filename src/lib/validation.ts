@@ -128,29 +128,46 @@ export const companyReviewSchema = z.object({
 // Схемы валидации для поиска
 export const searchSchema = z.object({
   q: z.string().optional(),
-  page: z.string().regex(/^\d+$/, 'Страница должна быть числом').transform(Number).default('1'),
-  limit: z.string().regex(/^\d+$/, 'Лимит должен быть числом').transform(Number).default('12'),
+  page: z.union([z.string(), z.number()]).transform(val => {
+    const num = typeof val === 'string' ? parseInt(val, 10) : val;
+    return isNaN(num) ? 1 : num;
+  }).default(1),
+  limit: z.union([z.string(), z.number()]).transform(val => {
+    const num = typeof val === 'string' ? parseInt(val, 10) : val;
+    return isNaN(num) ? 12 : num;
+  }).default(12),
   experience: z.string().optional(),
   employmentType: z.string().optional(),
   workFormat: z.string().optional(),
   location: z.string().optional(),
   category: z
-    .enum([
-      'IT',
-      'SALES',
-      'MARKETING',
-      'FINANCE',
-      'LOGISTICS',
-      'PRODUCTION',
-      'CONSTRUCTION',
-      'ADMIN',
-      'HR',
-      'HEALTHCARE',
-      'OTHER'
-    ])
-    .optional(),
-  salaryMin: z.string().regex(/^\d+$/, 'Минимальная зарплата должна быть числом').transform(Number).optional(),
-  salaryMax: z.string().regex(/^\d+$/, 'Максимальная зарплата должна быть числом').transform(Number).optional(),
+    .string()
+    .optional()
+    .transform((val) => {
+      if (!val || val.trim() === '') return undefined
+      const validCategories = [
+        'IT',
+        'SALES',
+        'MARKETING',
+        'FINANCE',
+        'LOGISTICS',
+        'PRODUCTION',
+        'CONSTRUCTION',
+        'ADMIN',
+        'HR',
+        'HEALTHCARE',
+        'OTHER'
+      ]
+      return validCategories.includes(val) ? val : undefined
+    }),
+  salaryMin: z.union([z.string(), z.number()]).transform(val => {
+    const num = typeof val === 'string' ? parseInt(val, 10) : val;
+    return isNaN(num) ? undefined : num;
+  }).optional(),
+  salaryMax: z.union([z.string(), z.number()]).transform(val => {
+    const num = typeof val === 'string' ? parseInt(val, 10) : val;
+    return isNaN(num) ? undefined : num;
+  }).optional(),
   currency: z.enum(['RUB', 'USD', 'EUR']).default('RUB')
 })
 

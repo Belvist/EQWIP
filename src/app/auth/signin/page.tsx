@@ -5,21 +5,16 @@ import { useState, type FormEvent } from 'react'
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, KeyRound, Send, RotateCcw } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/hooks/use-toast'
 
 export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [otpCode, setOtpCode] = useState('')
-  const [otpRequested, setOtpRequested] = useState(false)
-  const [resendIn, setResendIn] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -28,7 +23,9 @@ export default function SignIn() {
   const redirectByRole = async () => {
     const session = await getSession()
     const role = (session as any)?.user?.role
-    if (role === 'EMPLOYER') {
+    if (role === 'ADMIN') {
+      router.push('/admin')
+    } else if (role === 'EMPLOYER') {
       router.push('/employer')
     } else {
       router.push('/profile')
@@ -41,78 +38,31 @@ export default function SignIn() {
     setIsLoading(true)
 
     try {
-      // Step 1: verify password and send OTP
-      const res = await fetch('/api/auth/password-init', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const result = await signIn('credentials', { 
+        email, 
+        password, 
+        redirect: false 
       })
-      if (res.ok) {
-        setOtpRequested(true)
-        toast({ title: 'Код отправлен', description: 'Введите код из письма для входа' })
-        setResendIn(60)
-        const timer = setInterval(() => {
-          setResendIn((s) => {
-            if (s <= 1) { clearInterval(timer); return 0 }
-            return s - 1
-          })
-        }, 1000)
-      } else {
-        const j = await res.json().catch(() => ({}))
-        toast({ title: 'Ошибка входа', description: j.message || 'Неверный email или пароль', variant: 'destructive' })
-      }
-    } catch (error) {
-      toast({ title: "Ошибка", description: "Произошла ошибка при входе", variant: "destructive" })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleOAuthSignIn = (provider: string) => {
-    // Отдаём в callback универсальную страницу, которая пошлёт по роли
-    signIn(provider, { callbackUrl: '/auth/redirect' })
-  }
-
-  const requestOtp = async () => {
-    // Повторная отправка разрешена только после проверки пароля (есть маркер)
-    if (!otpRequested) {
-      toast({ title: 'Сначала введите пароль', description: 'Введите email и пароль, затем ОК', variant: 'destructive' })
-      return
-    }
-    if (resendIn > 0) return
-    try {
-      const res = await fetch('/api/auth/otp/request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, purpose: 'login' }),
-      })
-      if (res.ok) {
-        toast({ title: 'Код отправлен повторно', description: 'Проверьте почту' })
-        setResendIn(60)
-        const timer = setInterval(() => {
-          setResendIn((s) => {
-            if (s <= 1) { clearInterval(timer); return 0 }
-            return s - 1
-          })
-        }, 1000)
-      } else {
-        const j = await res.json().catch(() => ({}))
-        toast({ title: 'Не удалось отправить код', description: j.message || 'Попробуйте позже', variant: 'destructive' })
-      }
-    } catch {}
-  }
-
-  const loginWithOtp = async (e: FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    try {
-      const result = await signIn('email-otp', { email, code: otpCode, redirect: false })
+      
       if (result?.error) {
-        toast({ title: 'Ошибка', description: 'Неверный код', variant: 'destructive' })
+        toast({ 
+          title: 'Ошибка входа', 
+          description: 'Неверный email или пароль', 
+          variant: 'destructive' 
+        })
       } else {
-        toast({ title: 'Успешный вход', description: 'Вы успешно вошли в систему' })
+        toast({ 
+          title: 'Успешный вход', 
+          description: 'Вы успешно вошли в систему' 
+        })
         await redirectByRole()
       }
+    } catch (error) {
+      toast({ 
+        title: "Ошибка", 
+        description: "Произошла ошибка при входе", 
+        variant: "destructive" 
+      })
     } finally {
       setIsLoading(false)
     }
@@ -144,7 +94,7 @@ export default function SignIn() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder="admin@eqwip.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-9 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500"
@@ -160,7 +110,7 @@ export default function SignIn() {
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                    placeholder="123456"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-9 pr-10 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500"
@@ -177,33 +127,20 @@ export default function SignIn() {
               </div>
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                Войти
+                {isLoading ? 'Вход...' : 'Войти'}
               </Button>
             </form>
 
-            {otpRequested && (
-              <form onSubmit={loginWithOtp} className="space-y-2 mt-4">
-                <Label htmlFor="otp" className="text-gray-700 dark:text-gray-200">Код из письма</Label>
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                  <div className="pl-9">
-                    <InputOTP maxLength={6} value={otpCode} onChange={(v) => setOtpCode(v.replace(/\D+/g, ''))}>
-                      <InputOTPGroup className="gap-2">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                          <InputOTPSlot key={i} index={i} className="h-10 w-10 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white" />
-                        ))}
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </div>
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoading || !otpCode}>
-                  Подтвердить
-                </Button>
-                <Button type="button" variant="outline" className="w-full" onClick={requestOtp} disabled={resendIn > 0}>
-                  <RotateCcw className="w-4 h-4 mr-2" /> Отправить ещё раз {resendIn > 0 ? `(${resendIn}s)` : ''}
-                </Button>
-              </form>
-            )}
+            {/* Тестовые аккаунты */}
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Тестовые аккаунты:</h3>
+              <div className="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                <div><strong>admin@eqwip.com</strong> - Администратор</div>
+                <div><strong>employer1@eqwip.com</strong> - TechCorp HR</div>
+                <div><strong>candidate1@eqwip.com</strong> - Александр Иванов</div>
+                <div className="text-gray-500">Пароль для всех: <strong>123456</strong></div>
+              </div>
+            </div>
 
             {/* Links: Forgot password / Registration */}
             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 pt-2">

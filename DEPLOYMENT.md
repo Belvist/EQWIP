@@ -1,30 +1,115 @@
-# Deployment Guide
+# 🚀 Руководство по деплою EQWIP
 
-Руководство по развертыванию EQWIP в различных окружениях.
+## 🌐 Варианты деплоя
 
-## 🚀 Vercel (Рекомендуется)
+### 1. Vercel (Рекомендуется)
 
-### Автоматический деплой
-1. Подключите GitHub репозиторий к Vercel
-2. Настройте переменные окружения в Vercel Dashboard
-3. Деплой запустится автоматически при push в main ветку
+**Преимущества:**
+- Автоматический деплой из GitHub
+- Встроенная поддержка Next.js
+- Бесплатный хостинг
+- Автоматические SSL сертификаты
 
-### Переменные окружения для Vercel
-```env
-DATABASE_URL=postgresql://username:password@host:port/database
-NEXTAUTH_URL=https://your-domain.vercel.app
-NEXTAUTH_SECRET=your-secret-key
-AI_PROVIDER=ollama
-OLLAMA_URL=https://your-ollama-instance.com
-```
+**Шаги:**
 
-### Настройка базы данных
-- Используйте Vercel Postgres или внешний PostgreSQL
-- Примените миграции: `npx prisma migrate deploy`
+1. **Подготовьте репозиторий:**
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
 
-## 🐳 Docker
+2. **Подключите к Vercel:**
+   - Зайдите на [vercel.com](https://vercel.com)
+   - Войдите через GitHub
+   - Нажмите "New Project"
+   - Выберите репозиторий EQWIP
+   - Нажмите "Deploy"
 
-### Dockerfile
+3. **Настройте переменные окружения:**
+   ```env
+   DATABASE_URL="your-production-database-url"
+   NEXTAUTH_URL="https://your-domain.vercel.app"
+   NEXTAUTH_SECRET="your-production-secret"
+   AI_PROVIDER="ollama"
+   OLLAMA_URL="your-ollama-url"
+   ```
+
+4. **Настройте базу данных:**
+   ```bash
+   # В Vercel Dashboard -> Settings -> Environment Variables
+   # Добавьте переменные окружения
+   ```
+
+### 2. Railway
+
+**Преимущества:**
+- Простой деплой
+- Встроенная база данных PostgreSQL
+- Автоматические деплои
+
+**Шаги:**
+
+1. **Подключите к Railway:**
+   ```bash
+   npm install -g @railway/cli
+   railway login
+   railway init
+   ```
+
+2. **Настройте базу данных:**
+   ```bash
+   railway add postgresql
+   railway run npx prisma migrate deploy
+   railway run npx prisma db seed
+   ```
+
+3. **Деплой:**
+   ```bash
+   railway up
+   ```
+
+### 3. DigitalOcean App Platform
+
+**Преимущества:**
+- Полный контроль
+- Масштабируемость
+- Интеграция с DigitalOcean
+
+**Шаги:**
+
+1. **Создайте App Spec:**
+   ```yaml
+   name: eqwip
+   services:
+   - name: web
+     source_dir: /
+     github:
+       repo: Belvist/EQWIP
+       branch: main
+     run_command: npm start
+     environment_slug: node-js
+     instance_count: 1
+     instance_size_slug: basic-xxs
+     envs:
+     - key: NODE_ENV
+       value: production
+     - key: DATABASE_URL
+       value: ${db.DATABASE_URL}
+   databases:
+   - name: db
+     engine: PG
+     version: "13"
+   ```
+
+2. **Деплой через CLI:**
+   ```bash
+   doctl apps create --spec .do/app.yaml
+   ```
+
+### 4. Docker
+
+**Создайте Dockerfile:**
 ```dockerfile
 FROM node:18-alpine
 
@@ -41,7 +126,7 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-### docker-compose.yml
+**Docker Compose:**
 ```yaml
 version: '3.8'
 services:
@@ -50,15 +135,15 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/eqwip
+      - DATABASE_URL=postgresql://user:password@db:5432/eqwip
     depends_on:
       - db
   
   db:
-    image: postgres:15
+    image: postgres:13
     environment:
       - POSTGRES_DB=eqwip
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -67,146 +152,135 @@ volumes:
   postgres_data:
 ```
 
-### Запуск
-```bash
-docker-compose up -d
+## 🗄️ Настройка базы данных
+
+### PostgreSQL (Рекомендуется для продакшена)
+
+1. **Создайте базу данных:**
+   ```sql
+   CREATE DATABASE eqwip_production;
+   CREATE USER eqwip_user WITH PASSWORD 'secure_password';
+   GRANT ALL PRIVILEGES ON DATABASE eqwip_production TO eqwip_user;
+   ```
+
+2. **Обновите DATABASE_URL:**
+   ```env
+   DATABASE_URL="postgresql://eqwip_user:secure_password@localhost:5432/eqwip_production"
+   ```
+
+3. **Примените миграции:**
+   ```bash
+   npx prisma migrate deploy
+   npx prisma db seed
+   ```
+
+### Supabase (Облачная PostgreSQL)
+
+1. **Создайте проект на [supabase.com](https://supabase.com)**
+2. **Получите connection string:**
+   ```env
+   DATABASE_URL="postgresql://postgres:[password]@db.[project].supabase.co:5432/postgres"
+   ```
+
+3. **Настройте Prisma:**
+   ```bash
+   npx prisma migrate deploy
+   npx prisma db seed
+   ```
+
+## 🔐 Настройка безопасности
+
+### 1. Переменные окружения
+
+**Обязательные для продакшена:**
+```env
+# База данных
+DATABASE_URL="your-production-database-url"
+
+# NextAuth
+NEXTAUTH_URL="https://your-domain.com"
+NEXTAUTH_SECRET="your-super-secret-key-here"
+
+# Email
+EMAIL_SERVER_HOST="smtp.gmail.com"
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER="your-email@gmail.com"
+EMAIL_SERVER_PASSWORD="your-app-password"
+EMAIL_FROM="noreply@your-domain.com"
+
+# AI (опционально)
+AI_PROVIDER="ollama"
+OLLAMA_URL="https://your-ollama-instance.com"
 ```
 
-## ☁️ AWS
+### 2. SSL сертификаты
 
-### EC2 + RDS
-1. Запустите EC2 инстанс (Ubuntu 20.04+)
-2. Создайте RDS PostgreSQL инстанс
-3. Настройте Security Groups
-4. Установите Node.js и PM2
-5. Клонируйте репозиторий и настройте
+**Vercel/Railway:** Автоматически
+**Собственный сервер:** Используйте Let's Encrypt
 
-### Elastic Beanstalk
-1. Создайте EB приложение
-2. Загрузите код через EB CLI
-3. Настройте переменные окружения
-4. Настройте RDS для базы данных
-
-## 🐧 Linux VPS
-
-### Установка зависимостей
-```bash
-# Обновление системы
-sudo apt update && sudo apt upgrade -y
-
-# Установка Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Установка PostgreSQL
-sudo apt install postgresql postgresql-contrib
-
-# Установка PM2
-sudo npm install -g pm2
-```
-
-### Настройка приложения
-```bash
-# Клонирование репозитория
-git clone https://github.com/Belvist/EQWIP.git
-cd EQWIP
-
-# Установка зависимостей
-npm install
-
-# Настройка базы данных
-sudo -u postgres createdb eqwip
-npm run db:migrate
-
-# Сборка приложения
-npm run build
-```
-
-### Запуск с PM2
-```bash
-# Создание ecosystem файла
-cat > ecosystem.config.js << EOF
-module.exports = {
-  apps: [{
-    name: 'eqwip',
-    script: 'npm',
-    args: 'start',
-    cwd: '/path/to/EQWIP',
-    instances: 'max',
-    exec_mode: 'cluster',
-    env: {
-      NODE_ENV: 'production',
-      PORT: 3000
-    }
-  }]
-}
-EOF
-
-# Запуск приложения
-pm2 start ecosystem.config.js
-pm2 save
-pm2 startup
-```
-
-### Настройка Nginx
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-    }
-}
-```
-
-## 🔒 SSL/HTTPS
-
-### Let's Encrypt
 ```bash
 # Установка Certbot
 sudo apt install certbot python3-certbot-nginx
 
 # Получение сертификата
 sudo certbot --nginx -d your-domain.com
-
-# Автоматическое обновление
-sudo crontab -e
-# Добавьте: 0 12 * * * /usr/bin/certbot renew --quiet
 ```
 
-## 📊 Мониторинг
+### 3. Firewall
 
-### PM2 Monitoring
 ```bash
-# Установка PM2 Plus
-pm2 install pm2-server-monit
-
-# Просмотр метрик
-pm2 monit
+# Откройте только необходимые порты
+sudo ufw allow 22    # SSH
+sudo ufw allow 80    # HTTP
+sudo ufw allow 443   # HTTPS
+sudo ufw enable
 ```
 
-### Логирование
+## 📊 Мониторинг и логи
+
+### 1. Логирование
+
+```javascript
+// В next.config.js
+module.exports = {
+  logging: {
+    fetches: {
+      fullUrl: true
+    }
+  }
+}
+```
+
+### 2. Мониторинг производительности
+
+**Vercel Analytics:**
 ```bash
-# Просмотр логов
-pm2 logs eqwip
-
-# Ротация логов
-pm2 install pm2-logrotate
+npm install @vercel/analytics
 ```
 
-## 🔄 CI/CD
+**Sentry (ошибки):**
+```bash
+npm install @sentry/nextjs
+```
+
+### 3. Health Check
+
+```javascript
+// pages/api/health.js
+export default function handler(req, res) {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString() 
+  })
+}
+```
+
+## 🔄 CI/CD Pipeline
 
 ### GitHub Actions
+
 ```yaml
+# .github/workflows/deploy.yml
 name: Deploy to Production
 
 on:
@@ -216,83 +290,114 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          
-      - name: Install dependencies
-        run: npm ci
-        
-      - name: Run tests
-        run: npm test
-        
-      - name: Build application
-        run: npm run build
-        
-      - name: Deploy to server
-        run: |
-          # Ваши команды деплоя
+    - uses: actions/checkout@v2
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm run test:final
+    
+    - name: Build application
+      run: npm run build
+    
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v20
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID }}
+        vercel-project-id: ${{ secrets.PROJECT_ID }}
+        vercel-args: '--prod'
 ```
 
-## 🗄️ База данных
+## 📈 Оптимизация производительности
 
-### Миграции в продакшене
+### 1. Next.js оптимизации
+
+```javascript
+// next.config.js
+module.exports = {
+  images: {
+    domains: ['your-domain.com'],
+    formats: ['image/webp', 'image/avif']
+  },
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: false
+}
+```
+
+### 2. Кэширование
+
+```javascript
+// В API routes
+export async function GET() {
+  return NextResponse.json(data, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300'
+    }
+  })
+}
+```
+
+### 3. CDN
+
+**Vercel:** Автоматически
+**Другие платформы:** Настройте CloudFlare или AWS CloudFront
+
+## 🚨 Backup и восстановление
+
+### 1. База данных
+
 ```bash
-# Применение миграций
-npx prisma migrate deploy
+# Backup
+pg_dump $DATABASE_URL > backup.sql
 
-# Сброс базы данных (ОСТОРОЖНО!)
-npx prisma migrate reset
+# Restore
+psql $DATABASE_URL < backup.sql
 ```
 
-### Бэкапы
+### 2. Файлы
+
 ```bash
-# Создание бэкапа
-pg_dump eqwip > backup_$(date +%Y%m%d_%H%M%S).sql
+# Backup файлов
+tar -czf files-backup.tar.gz public/uploads/
 
-# Восстановление из бэкапа
-psql eqwip < backup_20250127_120000.sql
+# Restore
+tar -xzf files-backup.tar.gz
 ```
 
-## 🚨 Troubleshooting
+## ✅ Чек-лист деплоя
 
-### Проблемы с памятью
-```bash
-# Увеличение лимита памяти Node.js
-export NODE_OPTIONS="--max-old-space-size=4096"
-```
+- [ ] Код загружен в GitHub
+- [ ] Переменные окружения настроены
+- [ ] База данных создана и настроена
+- [ ] Миграции применены
+- [ ] Тестовые данные загружены
+- [ ] SSL сертификат установлен
+- [ ] Домен настроен
+- [ ] Мониторинг настроен
+- [ ] Backup настроен
+- [ ] Тесты проходят
 
-### Проблемы с базой данных
-```bash
-# Проверка подключения
-npx prisma db pull
+## 🎉 Готово!
 
-# Сброс схемы
-npx prisma db push --force-reset
-```
+Ваша платформа EQWIP развернута в продакшене!
 
-### Проблемы с производительностью
-- Включите кэширование
-- Оптимизируйте запросы к БД
-- Используйте CDN для статических файлов
-- Настройте сжатие gzip
-
-## 📈 Масштабирование
-
-### Горизонтальное масштабирование
-- Используйте load balancer (Nginx, HAProxy)
-- Настройте несколько инстансов приложения
-- Используйте Redis для сессий
-
-### Вертикальное масштабирование
-- Увеличьте RAM и CPU сервера
-- Оптимизируйте запросы к БД
-- Используйте индексы в базе данных
+**Следующие шаги:**
+1. Протестируйте все функции
+2. Настройте мониторинг
+3. Настройте backup
+4. Обучите пользователей
 
 ---
 
-**Удачного деплоя!** 🚀
+**Успешного деплоя! 🚀**

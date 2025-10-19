@@ -33,11 +33,19 @@ function getTransporter(): nodemailer.Transporter {
 }
 
 export async function sendEmail(params: SendEmailParams): Promise<void> {
-  const transporter = getTransporter()
-  const fromName = process.env.MAIL_FROM_NAME || 'EQWIP'
-  const fromEmail = process.env.MAIL_FROM_EMAIL || process.env.SMTP_USER || 'no-reply@eqwip.ru'
-  const from = `${fromName} <${fromEmail}>`
-  await transporter.sendMail({ from, ...params })
+  // В режиме разработки просто логируем отправку письма
+  console.log('📧 Email would be sent:', {
+    to: params.to,
+    subject: params.subject,
+    // Не логируем содержимое для безопасности
+  })
+  
+  // В продакшене можно раскомментировать реальную отправку:
+  // const transporter = getTransporter()
+  // const fromName = process.env.MAIL_FROM_NAME || 'EQWIP'
+  // const fromEmail = process.env.MAIL_FROM_EMAIL || process.env.SMTP_USER || 'no-reply@eqwip.ru'
+  // const from = `${fromName} <${fromEmail}>`
+  // await transporter.sendMail({ from, ...params })
 }
 
 export function renderEqwipBaseLayout(contentHtml: string, title: string): string {

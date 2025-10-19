@@ -1,0 +1,155 @@
+.gradientBorder {
+  position: relative;
+  border-radius: var(--ai-r, 9999px);
+}
+
+/* Animate gradient phase (colors move along the ring, ring stays still) */
+@property --ai-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes ai-angle {
+  to { --ai-angle: 360deg; }
+}
+
+.gradientBorder::before {
+  content: "";
+  position: absolute;
+  inset: var(--ai-inset, 0);
+  padding: var(--ai-bw, 2px);
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--ai-angle),
+    color-mix(in oklch, #ff6b6b 55%, transparent) 0%,
+    color-mix(in oklch, #ff3cac 55%, transparent) 20%,
+    color-mix(in oklch, #9b5cff 55%, transparent) 40%,
+    color-mix(in oklch, #4a90ff 55%, transparent) 60%,
+    color-mix(in oklch, #3cf0ff 55%, transparent) 80%,
+    color-mix(in oklch, #ff6b6b 55%, transparent) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: ai-angle 8s linear infinite;
+  will-change: background;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity .25s ease;
+}
+
+/* soft glow outside the ring */
+.gradientBorder::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(255, 60, 172, 0.08), rgba(58, 240, 255, 0.06) 60%, transparent 70%);
+  filter: blur(18px);
+  pointer-events: none;
+  z-index: -1;
+  animation: ai-angle 10s linear infinite reverse;
+}
+
+
+.surface {
+  position: relative;
+  /* радиус берём из utility-класса rounded-xxx */
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  /* границу задаёт ваш внешний CSS (.dark .ai_surface__*) — здесь не трогаем */
+  z-index: 1;
+}
+
+/* Inline gradient ring on the same element (no external wrapper) */
+.surface::before {
+  content: "";
+  position: absolute;
+  inset: var(--ai-inset, 0);
+  padding: var(--ai-bw, 2px);
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--ai-angle),
+    color-mix(in oklch, #ff6b6b 55%, transparent) 0%,
+    color-mix(in oklch, #ff3cac 55%, transparent) 20%,
+    color-mix(in oklch, #9b5cff 55%, transparent) 40%,
+    color-mix(in oklch, #4a90ff 55%, transparent) 60%,
+    color-mix(in oklch, #3cf0ff 55%, transparent) 80%,
+    color-mix(in oklch, #ff6b6b 55%, transparent) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: ai-angle 8s linear infinite;
+  will-change: background;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity .25s ease;
+}
+
+:global(.dark) .surface {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.roundedPill {
+  --ai-r: 9999px;
+  --ai-bw: 2px; /* border width */
+}
+
+.roundedLg {
+  --ai-r: 1.5rem;
+}
+
+/* Inner ring helpers */
+.inner {
+  --ai-inset: 4px; /* move ring inside */
+}
+
+.innerLg {
+  --ai-inset: 8px;
+}
+
+.bwThin { --ai-bw: 3px; }
+.bwThick { --ai-bw: 4px; }
+/* ultra thin ring */
+.bwUltraThin { --ai-bw: 1px; }
+
+/* place ring exactly on the outer edge (over element border) */
+.edge { --ai-inset: -1px; }
+
+/* visibility and intensity helpers for focus state */
+.ringHidden::before { opacity: 0; }
+.ringVisible::before { opacity: 1; }
+.ringDim::before { opacity: .85; filter: saturate(1.25) brightness(1.1) contrast(1.05); }
+.ringVibrant::before { opacity: .96; filter: saturate(1.6) brightness(1.22) contrast(1.12); }
+.noGlow::after { opacity: 0; }
+/* softer outer glow for hero-style frosted look */
+.glowSoft::after { opacity: .2; filter: blur(22px) saturate(1.05); }
+/* extra soft ring */
+.ringSoft::before { opacity: .32; filter: saturate(.6) brightness(.9); }
+
+/* Modal backdrop: high-quality blur without dark blackout */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  /* Важно: используем background-color с !important, чтобы перебить глобальные .dark overrides */
+  background-color: rgba(255, 255, 255, 0.35) !important;
+  background: transparent;
+  isolation: isolate;
+}
+
+:global(.dark) .modalBackdrop {
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  /* лёгкое осветление, без чёрной заливки */
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  background: transparent;
+}
+
+
+

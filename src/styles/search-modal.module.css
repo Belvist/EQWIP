@@ -1,0 +1,38 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  background-color: rgba(255, 255, 255, 0.35) !important; /* resist globals */
+  z-index: 1000;
+  pointer-events: auto;
+  isolation: isolate;
+  will-change: backdrop-filter;
+}
+
+:global(.dark) .backdrop {
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  /* Light frosted glass in dark theme without black fill */
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-image: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,0.10), rgba(255,255,255,0.06) 40%, rgba(20,20,20,0.20) 80%) !important;
+}
+
+/* Явный класс для тёмной версии, если нужно принудительно обойти глобальные стили */
+.backdropDark {
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  background-image: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,0.12), rgba(255,255,255,0.06) 40%, rgba(20,20,20,0.18) 80%) !important;
+}
+
+/* Удалён глобальный селектор для совместимости с CSS‑modules purity. Достаточно .backdropDark. */
+
+/* Ensure no accidental overrides from global dark rules */
+:global(.dark) .backdrop.bg-black,
+:global(.dark) .backdrop[class*="bg-"] {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-image: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,0.10), rgba(255,255,255,0.06) 40%, rgba(20,20,20,0.20) 80%) !important;
+}
+
+

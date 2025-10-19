@@ -1,0 +1,1146 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: calc(var(--radius) - 2px);
+  --radius-xl: var(--radius);
+  --radius-2xl: calc(var(--radius) + 4px);
+  --radius-3xl: calc(var(--radius) + 8px);
+  --radius-4xl: calc(var(--radius) + 12px);
+}
+
+:root {
+  /* Базовая геометрия */
+  --radius: 1.5rem;
+
+  /* Палитра Концепт B (светлая): строгий редакционный светлый + один тёмный акцент */
+  --background: oklch(1 0 0);            /* white */
+  --foreground: oklch(0 0 0);            /* pure black text */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+
+  /* Акцентные цвета: темно-фиолетовый и красный */
+  --accent-primary: #393649;              /* темно-фиолетовый */
+  --accent-secondary: #D00E46;            /* красный */
+
+  /* Токены кнопок/ссылок, завязаны на accent */
+  --primary: var(--accent-primary);       /* темно-фиолетовый */
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* Нейтрали светлой темы */
+  --secondary: oklch(0.97 0 0);          /* gray-50 */
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);  /* gray-600 */
+  --accent: oklch(0.98 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: var(--accent-secondary); /* красный */
+  --border: oklch(0.922 0 0);            /* gray-200 */
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);              /* gray-400 neutral (no chroma) */
+
+  /* График/диаграммы (grayscale) */
+  --chart-1: oklch(0.35 0 0);
+  --chart-2: oklch(0.5 0 0);
+  --chart-3: oklch(0.65 0 0);
+  --chart-4: oklch(0.8 0 0);
+  --chart-5: oklch(0.9 0 0);
+
+  /* Сайдбар в светлой теме */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0 0 0);
+  --sidebar-primary: var(--accent-primary);     /* темно-фиолетовый */
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: var(--accent-primary);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Tailwind ring defaults */
+  --tw-ring-color: var(--ring);
+  --tw-ring-offset-color: var(--border);
+
+  /* Акцентные цвета вместо серых */
+  --color-gray-800: var(--accent-primary);     /* темно-фиолетовый */
+  --color-gray-900: var(--accent-primary);     /* темно-фиолетовый */
+}
+
+.dark {
+  /* Палитра Концепт A (тёмная): графит + яркий акцент от accent-h/c */
+  --background: oklch(0.145 0 0);        /* near-black */
+  --foreground: oklch(0.985 0 0);        /* white */
+  --card: var(--background);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: var(--background);
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* Акцентные цвета в темной теме */
+  --primary: var(--accent-primary);       /* темно-фиолетовый */
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.92 0 0);
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: var(--accent-secondary); /* красный */
+  --border: oklch(1 0 0 / 18%);
+  --input: oklch(1 0 0 / 22%);
+  --ring: oklch(0.7 0 0 / 35%);
+
+  --chart-1: oklch(0.85 0 0);
+  --chart-2: oklch(0.7 0 0);
+  --chart-3: oklch(0.55 0 0);
+  --chart-4: oklch(0.4 0 0);
+  --chart-5: oklch(0.3 0 0);
+
+  --sidebar: oklch(0.145 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--accent-primary);     /* темно-фиолетовый */
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.24 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  --tw-ring-color: var(--ring);
+  --tw-ring-offset-color: var(--border);
+
+  --color-gray-800: var(--accent-primary);     /* темно-фиолетовый */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html { direction: ltr; }
+  body {
+    @apply bg-background text-foreground;
+    text-align: left;
+    /* Предотвращаем горизонтальный скролл на мобильных из-за широких блоков */
+    overflow-x: hidden;
+  }
+  /* Глобально упорядочиваем box-sizing для стабильной вёрстки */
+  *, *::before, *::after { box-sizing: border-box; }
+}
+
+/* Universal focus and accent normalization */
+:root, .dark {
+  accent-color: var(--accent-primary); /* темно-фиолетовый */
+}
+:focus-visible, :focus, :focus-within {
+  outline-color: var(--ring);
+}
+
+/* Custom animations for smooth interactions */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.6s ease-out;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+/* Smooth transitions for all interactive elements */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700 focus:ring-offset-2;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #dbdbdb;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #b4b4b4;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #666666;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #818181;
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ensure buttons/links never collapse due to font-size:0 parents in external CSS */
+a, button {
+  font-size: inherit;
+}
+
+/* Enhanced button styles */
+.btn-enhanced {
+  @apply relative overflow-hidden transition-all duration-300 transform hover:scale-105 active:scale-95;
+}
+
+.btn-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-enhanced:hover::before {
+  left: 100%;
+}
+
+/* Dark, контрастная стеклянная кнопка для чёрного фона */
+.btn-glass-dark {
+  @apply text-white bg-[#393649]/80 hover:bg-[#393649] border border-white/15 shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_8px_24px_rgba(0,0,0,0.35)] rounded-xl;
+}
+.btn-glass-dark:disabled {
+  @apply opacity-60 cursor-not-allowed bg-[#393649]/60 text-white;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  /* Ensure gradient text is visible in all browsers */
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Loading animation */
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: loading-dots 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes loading-dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Ripple effect */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Enhanced input styles */
+.input-enhanced {
+  @apply w-full px-6 py-4 bg-white dark:bg-black border-2 border-gray-200 dark:border-gray-800 rounded-3xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-gray-400 dark:focus:border-gray-600 transition-all duration-300;
+}
+
+/* Enhanced card styles */
+.card-enhanced {
+  @apply bg-white dark:bg-black border-2 border-gray-200 dark:border-gray-800 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300;
+}
+
+/* Badge styles */
+.badge-enhanced {
+  @apply inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .text-responsive {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+  /* Картинки и видео адаптивные по ширине контейнера */
+  img, video { max-width: 100%; height: auto; }
+  /* Таблицы и длинные блоки не ломают вьюпорт */
+  table { display: block; width: 100%; overflow-x: auto; }
+  pre, code { white-space: pre-wrap; word-break: break-word; }
+  /* Сетки без переполнения */
+  .container, .mx-auto, .max-w-4xl, .max-w-3xl, .max-w-2xl { padding-left: 1rem; padding-right: 1rem; }
+  /* Небольшое общее уменьшение плотности шрифта на ультра-узких экранах */
+  body { font-size: 0.97rem; }
+  /* Фикс размеров интерактивных кнопок/иконок в шапке */
+  .btn-touch-48 { width: 48px; height: 48px; }
+  /* Адаптив крупной типографики Tailwind: исключаем переполнение на телефонах */
+  .text-6xl, .text-7xl, .text-8xl, .text-9xl { 
+    font-size: clamp(1.9rem, 8.5vw, 2.8rem) !important; 
+    line-height: 1.1 !important; 
+    word-break: break-word; 
+  }
+  .text-4xl, .text-5xl { 
+    font-size: clamp(1.5rem, 6.5vw, 2.1rem) !important; 
+    line-height: 1.15 !important; 
+  }
+}
+
+/* Узкие экраны: большие сетки в одну колонку, чтобы не ломать вёрстку */
+@media (max-width: 480px) {
+  .grid[class*="grid-cols-3"],
+  .grid[class*="grid-cols-4"],
+  .grid[class*="grid-cols-5"],
+  .grid[class*="grid-cols-6"],
+  .grid[class*="grid-cols-7"],
+  .grid[class*="grid-cols-8"],
+  .grid[class*="grid-cols-9"],
+  .grid[class*="grid-cols-10"],
+  .grid[class*="grid-cols-11"],
+  .grid[class*="grid-cols-12"] { grid-template-columns: 1fr !important; }
+}
+
+/* Сверхузкие экраны: предотвратить налезание кнопок на логотип в шапке */
+@media (max-width: 380px) {
+  .header-slim .hide-xxs { display: none !important; }
+  .header-slim .logo-clip { font-size: 1.25rem !important; }
+  .header-slim .btn-touch-48 { width: 40px; height: 40px; }
+}
+
+/* Утилита для переноса любых длинных строк (в т.ч. внутри уведомлений) */
+.break-anywhere { overflow-wrap: anywhere; word-break: break-word; }
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  /* Убираем фон и сохраняем цвета текста для печати */
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color: oklch(0.145 0 0);
+    background: white !important;
+  }
+  .dark body { color: black }
+  #resume-print {
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    padding: 0 !important;
+  }
+  @page { margin: 16mm }
+}
+
+/* Utility classes for consistent spacing */
+.spacing-xs { @apply space-y-1; }
+.spacing-sm { @apply space-y-2; }
+.spacing-md { @apply space-y-4; }
+.spacing-lg { @apply space-y-6; }
+.spacing-xl { @apply space-y-8; }
+.spacing-2xl { @apply space-y-12; }
+
+/* Consistent padding and margin */
+.padding-xs { @apply p-2; }
+.padding-sm { @apply p-4; }
+.padding-md { @apply p-6; }
+.padding-lg { @apply p-8; }
+.padding-xl { @apply p-12; }
+.padding-2xl { @apply p-16; }
+
+.margin-xs { @apply m-2; }
+.margin-sm { @apply m-4; }
+.margin-md { @apply m-6; }
+.margin-lg { @apply m-8; }
+.margin-xl { @apply m-12; }
+.margin-2xl { @apply m-16; }
+
+/* Dark-mode global background harmonization (unify pages look)
+   Ensure all full-height page wrappers and legacy light backgrounds
+   switch to design tokens when dark theme is active. */
+.dark .min-h-screen {
+  background-color: var(--background) !important;
+  color: var(--foreground);
+}
+/* При открытом шапочном поиске отключаем фоновую заливку у контейнеров страницы,
+   чтобы backdrop-filter корректно показывал размытие */
+.dark.search-blur-active .min-h-screen {
+  background-color: transparent !important;
+}
+/* Исключение для модального поиска: не трогать фон оверлея-блюра */
+.dark .ai-modal-backdrop { background: transparent !important; }
+:root.search-blur-active body > *:not(.ai-modal-backdrop) { filter: none; }
+.search-blur-active .ai-modal-backdrop { isolation: isolate; }
+/* Light-mode: do not force backgrounds globally to avoid breaking components */
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-50,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-slate-50 {
+  background-color: var(--background) !important;
+}
+/* Исключение для модального поиска (слой блюра должен оставаться прозрачным, чтобы работал backdrop-filter) */
+.dark :is(.ai-modal-backdrop) { background: transparent !important; }
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-white {
+  background-color: var(--card) !important;
+}
+.dark .bg-black { background-color: #141414 !important; }
+.dark\:bg-black:is(.dark *) { background-color: #141414 !important; }
+
+/* Ensure outline buttons and neutral surfaces are visible in dark theme */
+.dark .bg-white\/60 { background-color: rgba(255,255,255,0.08) !important; }
+.dark .bg-gray-50, .dark .bg-slate-50,
+.dark .bg-gray-100, .dark .bg-slate-100,
+.dark .bg-gray-200, .dark .bg-slate-200,
+.dark .bg-gray-300, .dark .bg-slate-300 { background-color: rgba(255,255,255,0.08) !important; }
+.dark .bg-slate-400,
+.dark .bg-slate-500,
+.dark .bg-slate-600,
+.dark .bg-slate-700,
+.dark .bg-slate-800,
+.dark .bg-slate-900,
+.dark [class*="bg-slate-"] { background-color: var(--background) !important; }
+.dark .border-gray-200 { border-color: var(--color-gray-800) !important; }
+.dark .border-slate-200,
+.dark .border-slate-300,
+.dark .border-slate-400,
+.dark .border-slate-500,
+.dark .border-slate-600,
+.dark .border-slate-700,
+.dark .border-slate-800,
+.dark .border-slate-900,
+.dark [class*="border-slate-200"],
+.dark [class*="border-slate-300"],
+.dark [class*="border-slate-400"],
+.dark [class*="border-slate-500"],
+.dark [class*="border-slate-600"],
+.dark [class*="border-slate-700"],
+.dark [class*="border-slate-800"],
+.dark [class*="border-slate-900"] { border-color: var(--color-gray-800) !important; }
+.dark .text-slate-900 { color: var(--foreground) !important; }
+.dark .text-slate-600 { color: var(--muted-foreground) !important; }
+.dark .text-gray-500,
+.dark .text-slate-500,
+.dark .text-gray-400,
+.dark .text-slate-400,
+.dark .text-gray-300,
+.dark .text-slate-300 { color: var(--muted-foreground) !important; }
+
+/* Light theme: force these gray/slate text utilities to black (readability) */
+:not(.dark) .text-gray-500,
+:not(.dark) .text-gray-400,
+:not(.dark) .text-gray-300,
+:not(.dark) .text-slate-500,
+:not(.dark) .text-slate-400,
+:not(.dark) .text-slate-300,
+:not(.dark) [class*="text-gray-5"],
+:not(.dark) [class*="text-gray-4"],
+:not(.dark) [class*="text-gray-3"],
+:not(.dark) [class*="text-slate-5"],
+:not(.dark) [class*="text-slate-4"],
+:not(.dark) [class*="text-slate-3"] {
+  color: oklch(0 0 0) !important; /* black */
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gradient-to-br {
+  background-image: none !important;
+  background-color: var(--background) !important;
+}
+/* Light: keep gradients; we only neutralize explicit blue classes elsewhere */
+
+/* Light: do not unify gray backgrounds globally to avoid clashes */
+
+/* Force overriding problematic inline hex tints to neutral gray (safe: text/fill/stroke only) */
+[style*="#101828"],
+[style*="#364153"],
+[style*="#374151"] {
+  color: #808080 !important;
+  fill: #808080 !important;
+  stroke: #808080 !important;
+}
+/* Additionally normalize common inline backgrounds/borders using slate hex in light theme */
+:not(.dark) [style*="#101828"][style*="background"] { background-color: #1a1a1a !important; }
+:not(.dark) [style*="#101828"][style*="color"] { color: #252525 !important; }
+:not(.dark) [style*="#364153"][style*="border"] { border-color: #d1d5db !important; }
+:not(.dark) [style*="#364153"][style*="outline"] { outline-color: #b3b3b3 !important; }
+.dark [class*="from-slate-"],
+.dark [class*="via-slate-"],
+.dark [class*="to-slate-"] {
+  background-image: none !important;
+  --tw-gradient-from: transparent !important;
+  --tw-gradient-to: transparent !important;
+  --tw-gradient-stops: none !important;
+}
+.dark .text-gray-900,
+.dark .text-slate-900 {
+  color: var(--foreground) !important;
+}
+
+/* Ensure darker grays become readable in dark mode */
+.dark .text-gray-800,
+.dark .text-slate-800,
+.dark .text-gray-700,
+.dark .text-slate-700 {
+  color: var(--foreground) !important;
+}
+.dark .text-gray-600,
+.dark .text-slate-600 {
+  color: var(--muted-foreground) !important;
+}
+
+/* Map blue utilities to gray in light theme */
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="text-blue-"] { color: #808080 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="bg-blue-"] { background-color: #e5e7eb !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="border-blue-"] { border-color: #d1d5db !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="ring-blue-"] { --tw-ring-color: #b1b1b1 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="outline-blue-"] { outline-color: #b1b1b1 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="from-blue-"] { --tw-gradient-from: #e5e7eb !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="via-blue-"] { --tw-gradient-via: #f3f4f6 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="to-blue-"] { --tw-gradient-to: #ffffff !important; }
+
+/* Light: additional blue-related utilities */
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="ring-offset-blue-"] { --tw-ring-offset-color: #e5e7eb !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="caret-blue-"] { caret-color: #b1b1b1 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="decoration-blue-"] { text-decoration-color: #9ca3af !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="accent-blue-"] { accent-color: #808080 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="shadow-blue-"] { --tw-shadow-color: #9ca3af !important; }
+*:where([class*="placeholder:text-blue-"])::placeholder { color: #b4b4b4 !important; }
+*:where([class*="selection:bg-blue-"])::selection { background-color: #e5e7eb !important; color: #1a1a1a !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="divide-blue-"] > :not([hidden]) ~ :not([hidden]) { border-color: #d1d5db !important; }
+
+/* Light: neutralize square-bracket hex utilities with blue-ish tints */
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="bg-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="bg-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="bg-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="bg-\[#111827\]"] { background-color: #e5e7eb !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="text-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="text-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="text-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="text-\[#111827\]"] { color: #808080 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="border-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="border-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="border-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="border-\[#111827\]"] { border-color: #d1d5db !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="ring-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="ring-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="ring-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="ring-\[#111827\]"] { --tw-ring-color: #9ca3af !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="from-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="from-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="from-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="from-\[#111827\]"] { --tw-gradient-from: #e5e7eb !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="via-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="via-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="via-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="via-\[#111827\]"] { --tw-gradient-via: #f3f4f6 !important; }
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="to-\[#101828\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="to-\[#364153\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="to-\[#374151\]"],
+:not(.dark) :not([data-slot="button"]):not([data-slot="badge"])[class*="to-\[#111827\]"] { --tw-gradient-to: #ffffff !important; }
+
+/* Light theme: force any blue fills/strokes and subtle blue backgrounds to gray */
+:not(.dark) [class*="fill-blue-"] { fill: #808080 !important; }
+:not(.dark) [class*="stroke-blue-"] { stroke: #afafaf !important; }
+:not(.dark) .bg-blue-50,
+:not(.dark) .bg-blue-100,
+:not(.dark) .bg-blue-200,
+:not(.dark) .bg-blue-300,
+:not(.dark) .bg-blue-400,
+:not(.dark) .bg-blue-900\/20 { background-color: #f3f4f6 !important; }
+
+/* Light theme: neutralize indigo/cyan tints as well */
+:not(.dark) [class*="text-indigo-"],
+:not(.dark) [class*="text-cyan-"] { color: #808080 !important; }
+:not(.dark) [class*="bg-indigo-"],
+:not(.dark) [class*="bg-cyan-"] { background-color: #e5e7eb !important; }
+:not(.dark) [class*="border-indigo-"],
+:not(.dark) [class*="border-cyan-"] { border-color: #d1d5db !important; }
+:not(.dark) [class*="ring-indigo-"],
+:not(.dark) [class*="ring-cyan-"] { --tw-ring-color: #9ca3af !important; }
+:not(.dark) [class*="outline-indigo-"],
+:not(.dark) [class*="outline-cyan-"] { outline-color: #9ca3af !important; }
+
+/* Light theme: neutralize emerald/green tints (success) */
+:not(.dark) [class*="text-emerald-"],
+:not(.dark) [class*="text-green-"] { color: #1a1a1a !important; }
+:not(.dark) [class*="bg-emerald-"],
+:not(.dark) [class*="bg-green-"] { background-color: #e5e7eb !important; }
+:not(.dark) [class*="border-emerald-"],
+:not(.dark) [class*="border-green-"] { border-color: #d1d5db !important; }
+:not(.dark) [class*="ring-emerald-"],
+:not(.dark) [class*="ring-green-"] { --tw-ring-color: #9ca3af !important; }
+:not(.dark) [class*="outline-emerald-"],
+:not(.dark) [class*="outline-green-"] { outline-color: #9ca3af !important; }
+:not(.dark) [class*="from-emerald-"],
+:not(.dark) [class*="via-emerald-"],
+:not(.dark) [class*="to-emerald-"],
+:not(.dark) [class*="from-green-"],
+:not(.dark) [class*="via-green-"],
+:not(.dark) [class*="to-green-"] { 
+  --tw-gradient-from: #e5e7eb !important; 
+  --tw-gradient-to: #ffffff !important; 
+  --tw-gradient-via: #f3f4f6 !important; 
+}
+
+/* Interactive state overrides for blue/indigo/cyan/sky/slate in LIGHT theme */
+:not(.dark) [class*="hover:text-blue-"]:hover,
+:not(.dark) [class*="hover:text-indigo-"]:hover,
+:not(.dark) [class*="hover:text-cyan-"]:hover,
+:not(.dark) [class*="hover:text-sky-"]:hover,
+:not(.dark) [class*="hover:text-slate-"]:hover { color: #1a1a1a !important; }
+
+:not(.dark) [class*="hover:bg-blue-"]:hover,
+:not(.dark) [class*="hover:bg-indigo-"]:hover,
+:not(.dark) [class*="hover:bg-cyan-"]:hover,
+:not(.dark) [class*="hover:bg-sky-"]:hover,
+:not(.dark) [class*="hover:bg-slate-"]:hover { background-color: #e5e7eb !important; }
+
+:not(.dark) [class*="hover:border-blue-"]:hover,
+:not(.dark) [class*="hover:border-indigo-"]:hover,
+:not(.dark) [class*="hover:border-cyan-"]:hover,
+:not(.dark) [class*="hover:border-sky-"]:hover,
+:not(.dark) [class*="hover:border-slate-"]:hover { border-color: #d1d5db !important; }
+
+:not(.dark) [class*="active:text-blue-"]:active,
+:not(.dark) [class*="active:text-indigo-"]:active,
+:not(.dark) [class*="active:text-cyan-"]:active,
+:not(.dark) [class*="active:text-sky-"]:active,
+:not(.dark) [class*="active:text-slate-"]:active { color: #111111 !important; }
+
+:not(.dark) [class*="active:bg-blue-"]:active,
+:not(.dark) [class*="active:bg-indigo-"]:active,
+:not(.dark) [class*="active:bg-cyan-"]:active,
+:not(.dark) [class*="active:bg-sky-"]:active,
+:not(.dark) [class*="active:bg-slate-"]:active { background-color: #e5e7eb !important; }
+
+:not(.dark) [class*="active:border-blue-"]:active,
+:not(.dark) [class*="active:border-indigo-"]:active,
+:not(.dark) [class*="active:border-cyan-"]:active,
+:not(.dark) [class*="active:border-sky-"]:active,
+:not(.dark) [class*="active:border-slate-"]:active { border-color: #9ca3af !important; }
+
+/* Light theme: remove bluish slate/sky tints → neutral gray */
+:not(.dark) [class*="text-slate-"] { color: oklch(0 0 0) !important; }
+:not(.dark) [class*="bg-slate-"] { background-color: #ffffff !important; }
+:not(.dark) [class*="border-slate-"] { border-color: #d1d5db !important; }
+:not(.dark) [class*="ring-slate-"] { --tw-ring-color: #acacac !important; }
+:not(.dark) [class*="outline-slate-"] { outline-color: #afafaf !important; }
+:not(.dark) [class*="text-sky-"],
+:not(.dark) [class*="bg-sky-"],
+:not(.dark) [class*="border-sky-"],
+:not(.dark) [class*="ring-sky-"],
+:not(.dark) [class*="outline-sky-"] {
+  color: unset;
+  background-color: #e5e7eb !important;
+  border-color: #d1d5db !important;
+  --tw-ring-color: #9ca3af !important;
+  outline-color: #9ca3af !important;
+}
+
+/* Also neutralize blue accents on interactive elements (buttons/links) */
+:not(.dark) a[class*="bg-blue-"],
+:not(.dark) button[class*="bg-blue-"],
+:not(.dark) [role="button"][class*="bg-blue-"],
+:not(.dark) .btn-enhanced[class*="bg-blue-"],
+:not(.dark) [data-slot="button"][class*="bg-blue-"],
+:not(.dark) [data-slot="badge"][class*="bg-blue-"] {
+  background-color: #e5e7eb !important; /* gray-200 */
+  color: #1a1a1a !important; /* neutral-900 text */
+}
+:not(.dark) a[class*="text-blue-"],
+:not(.dark) button[class*="text-blue-"],
+:not(.dark) [role="button"][class*="text-blue-"],
+:not(.dark) .btn-enhanced[class*="text-blue-"],
+:not(.dark) [data-slot="button"][class*="text-blue-"],
+:not(.dark) [data-slot="badge"][class*="text-blue-"] {
+  color: #1a1a1a !important;
+}
+:not(.dark) a[class*="border-blue-"],
+:not(.dark) button[class*="border-blue-"],
+:not(.dark) [role="button"][class*="border-blue-"],
+:not(.dark) .btn-enhanced[class*="border-blue-"],
+:not(.dark) [data-slot="button"][class*="border-blue-"],
+:not(.dark) [data-slot="badge"][class*="border-blue-"] {
+  border-color: #d1d5db !important; /* gray-300 */
+}
+:not(.dark) a[class*="ring-blue-"],
+:not(.dark) button[class*="ring-blue-"],
+:not(.dark) [role="button"][class*="ring-blue-"],
+:not(.dark) .btn-enhanced[class*="ring-blue-"],
+:not(.dark) [data-slot="button"][class*="ring-blue-"],
+:not(.dark) [data-slot="badge"][class*="ring-blue-"] {
+  --tw-ring-color: #9ca3af !important; /* gray-400 */
+}
+:not(.dark) a[class*="from-blue-"],
+:not(.dark) button[class*="from-blue-"],
+:not(.dark) [role="button"][class*="from-blue-"],
+:not(.dark) .btn-enhanced[class*="from-blue-"],
+:not(.dark) [data-slot="button"][class*="from-blue-"],
+:not(.dark) [data-slot="badge"][class*="from-blue-"] {
+  --tw-gradient-from: #e5e7eb !important; /* gray-200 */
+}
+:not(.dark) a[class*="via-blue-"],
+:not(.dark) button[class*="via-blue-"],
+:not(.dark) [role="button"][class*="via-blue-"],
+:not(.dark) .btn-enhanced[class*="via-blue-"],
+:not(.dark) [data-slot="button"][class*="via-blue-"],
+:not(.dark) [data-slot="badge"][class*="via-blue-"] {
+  --tw-gradient-via: #f3f4f6 !important; /* gray-100 */
+}
+:not(.dark) a[class*="to-blue-"],
+:not(.dark) button[class*="to-blue-"],
+:not(.dark) [role="button"][class*="to-blue-"],
+:not(.dark) .btn-enhanced[class*="to-blue-"],
+:not(.dark) [data-slot="button"][class*="to-blue-"],
+:not(.dark) [data-slot="badge"][class*="to-blue-"] {
+  --tw-gradient-to: #ffffff !important; /* white */
+}
+
+.dark a[class*="bg-blue-"],
+.dark button[class*="bg-blue-"],
+.dark [role="button"][class*="bg-blue-"],
+.dark .btn-enhanced[class*="bg-blue-"] {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+}
+.dark a[class*="text-blue-"],
+.dark button[class*="text-blue-"],
+.dark [role="button"][class*="text-blue-"],
+.dark .btn-enhanced[class*="text-blue-"] {
+  color: var(--foreground) !important;
+}
+.dark a[class*="border-blue-"],
+.dark button[class*="border-blue-"],
+.dark [role="button"][class*="border-blue-"],
+.dark .btn-enhanced[class*="border-blue-"] {
+  border-color: var(--border) !important;
+}
+.dark a[class*="ring-blue-"],
+.dark button[class*="ring-blue-"],
+.dark [role="button"][class*="ring-blue-"],
+.dark .btn-enhanced[class*="ring-blue-"] {
+  --tw-ring-color: var(--ring) !important;
+}
+.dark a[class*="from-blue-"],
+.dark button[class*="from-blue-"],
+.dark [role="button"][class*="from-blue-"],
+.dark .btn-enhanced[class*="from-blue-"] {
+  --tw-gradient-from: #2a2a2a !important; /* neutral dark from */
+}
+.dark a[class*="via-blue-"],
+.dark button[class*="via-blue-"],
+.dark [role="button"][class*="via-blue-"],
+.dark .btn-enhanced[class*="via-blue-"] {
+  --tw-gradient-via: #242424 !important; /* neutral dark via */
+}
+.dark a[class*="to-blue-"],
+.dark button[class*="to-blue-"],
+.dark [role="button"][class*="to-blue-"],
+.dark .btn-enhanced[class*="to-blue-"] {
+  --tw-gradient-to: #141414 !important; /* neutral dark to */
+}
+
+/* Dark theme: neutralize emerald/green tints */
+.dark [class*="text-emerald-"],
+.dark [class*="text-green-"] { color: var(--foreground) !important; }
+.dark [class*="bg-emerald-"],
+.dark [class*="bg-green-"] { background-color: var(--muted) !important; }
+.dark [class*="border-emerald-"],
+.dark [class*="border-green-"] { border-color: var(--border) !important; }
+.dark [class*="ring-emerald-"],
+.dark [class*="ring-green-"] { --tw-ring-color: var(--ring) !important; }
+.dark [class*="outline-emerald-"],
+.dark [class*="outline-green-"] { outline-color: var(--ring) !important; }
+.dark [class*="from-emerald-"],
+.dark [class*="via-emerald-"],
+.dark [class*="to-emerald-"],
+.dark [class*="from-green-"],
+.dark [class*="via-green-"],
+.dark [class*="to-green-"] {
+  --tw-gradient-from: #2a2a2a !important; /* neutral dark from */
+  --tw-gradient-via: #242424 !important;  /* neutral dark via */
+  --tw-gradient-to: #141414 !important;   /* neutral dark to */
+}
+
+/* Interactive state overrides for blue/indigo/cyan/sky/slate in DARK theme */
+.dark [class*="hover:text-blue-"]:hover,
+.dark [class*="hover:text-indigo-"]:hover,
+.dark [class*="hover:text-cyan-"]:hover,
+.dark [class*="hover:text-sky-"]:hover,
+.dark [class*="hover:text-slate-"]:hover { color: var(--foreground) !important; }
+
+.dark [class*="hover:bg-blue-"]:hover,
+.dark [class*="hover:bg-indigo-"]:hover,
+.dark [class*="hover:bg-cyan-"]:hover,
+.dark [class*="hover:bg-sky-"]:hover,
+.dark [class*="hover:bg-slate-"]:hover { background-color: var(--muted) !important; }
+
+.dark [class*="hover:border-blue-"]:hover,
+.dark [class*="hover:border-indigo-"]:hover,
+.dark [class*="hover:border-cyan-"]:hover,
+.dark [class*="hover:border-sky-"]:hover,
+.dark [class*="hover:border-slate-"]:hover { border-color: var(--border) !important; }
+
+.dark [class*="active:text-blue-"]:active,
+.dark [class*="active:text-indigo-"]:active,
+.dark [class*="active:text-cyan-"]:active,
+.dark [class*="active:text-sky-"]:active,
+.dark [class*="active:text-slate-"]:active { color: var(--foreground) !important; }
+
+.dark [class*="active:bg-blue-"]:active,
+.dark [class*="active:bg-indigo-"]:active,
+.dark [class*="active:bg-cyan-"]:active,
+.dark [class*="active:bg-sky-"]:active,
+.dark [class*="active:bg-slate-"]:active { background-color: var(--muted) !important; }
+
+.dark [class*="active:border-blue-"]:active,
+.dark [class*="active:border-indigo-"]:active,
+.dark [class*="active:border-cyan-"]:active,
+.dark [class*="active:border-sky-"]:active,
+.dark [class*="active:border-slate-"]:active { border-color: var(--border) !important; }
+
+/* Neutralize indigo/cyan accents commonly paired with blue */
+:not(.dark) [class*="from-indigo-"],
+:not(.dark) [class*="to-indigo-"],
+:not(.dark) [class*="via-indigo-"] { --tw-gradient-from: #e5e7eb !important; --tw-gradient-to: #ffffff !important; --tw-gradient-via: #f3f4f6 !important; }
+.dark [class*="from-indigo-"],
+.dark [class*="to-indigo-"],
+.dark [class*="via-indigo-"] { --tw-gradient-from: #2a2a2a !important; --tw-gradient-to: #141414 !important; --tw-gradient-via: #242424 !important; }
+:not(.dark) [class*="from-cyan-"],
+:not(.dark) [class*="to-cyan-"],
+:not(.dark) [class*="via-cyan-"] { --tw-gradient-from: #e5e7eb !important; --tw-gradient-to: #ffffff !important; --tw-gradient-via: #f3f4f6 !important; }
+.dark [class*="from-cyan-"],
+.dark [class*="to-cyan-"],
+.dark [class*="via-cyan-"] { --tw-gradient-from: #2a2a2a !important; --tw-gradient-to: #141414 !important; --tw-gradient-via: #242424 !important; }
+
+/* Desaturate blue tints for non-button elements in dark mode (keep buttons/links blue) */
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced).text-blue-600,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced).text-blue-500,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced).text-blue-400 {
+  color: var(--foreground) !important;
+}
+
+/* Neutralize subtle blue backgrounds in dark mode for non-interactive surfaces */
+.dark .bg-blue-50,
+.dark .bg-blue-100,
+.dark .bg-blue-200,
+.dark .bg-blue-900\/20 {
+  background-color: var(--muted) !important;
+}
+
+/* Dark theme: unify all gray/neutral backgrounds to one surface tone */
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-400,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-500,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-600,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-700,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-800,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-gray-900,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-neutral-800,
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"]).bg-neutral-900 { background-color: var(--background) !important; }
+
+/* Generic blue desaturation for non-button elements (borders, rings, outlines, texts, fills) */
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="border-blue-"] {
+  border-color: var(--border) !important;
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="ring-blue-"] {
+  --tw-ring-color: var(--ring) !important;
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="outline-blue-"] {
+  outline-color: var(--ring) !important;
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-blue-"] {
+  background-color: var(--muted) !important;
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="text-blue-"] {
+  color: var(--foreground) !important;
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="fill-blue-"] {
+  fill: var(--foreground) !important;
+}
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="stroke-blue-"] {
+  stroke: var(--foreground) !important;
+}
+
+/* Replace any gray-800 borders with unified border token (dark mode) */
+.dark .border-gray-800,
+.dark [class*="border-gray-800"] {
+  border-color: var(--color-gray-800) !important;
+}
+/* Also normalize gray-700 borders to the same neutral tone (no tint) */
+.dark .border-gray-700,
+.dark [class*="border-gray-700"] {
+  border-color: var(--color-gray-800) !important;
+}
+/* Dividers using gray-800 */
+.dark .divide-gray-800 > :not([hidden]) ~ :not([hidden]),
+.dark [class*="divide-gray-800"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--color-gray-800) !important;
+}
+/* Dividers using slate-200/300 should also adopt unified border tone */
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-300 > :not([hidden]) ~ :not([hidden]),
+.dark [class*="divide-slate-200"] > :not([hidden]) ~ :not([hidden]),
+.dark [class*="divide-slate-300"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--color-gray-800) !important;
+}
+/* Rings using gray-800 */
+.dark .ring-gray-800,
+.dark [class*="ring-gray-800"] {
+  --tw-ring-color: var(--color-gray-800) !important;
+}
+/* Rings and outlines using slate/gray 200 map to neutral ring */
+.dark .ring-gray-200,
+.dark .ring-slate-200,
+.dark [class*="ring-slate-200"],
+.dark [class*="ring-gray-200"] { --tw-ring-color: var(--ring) !important; }
+.dark .outline-slate-200,
+.dark [class*="outline-slate-200"],
+.dark .outline-gray-200,
+.dark [class*="outline-gray-200"] { outline-color: var(--ring) !important; }
+
+/* Force neutral gray gradients in dark mode (remove bluish tint) */
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"])[class*="bg-gradient-to-"][class*="from-gray-900"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="from-gray-800"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="from-gray-700"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="from-gray-600"] { --tw-gradient-from: #2a2a2a !important; }
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"])[class*="bg-gradient-to-"][class*="via-gray-900"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="via-gray-800"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="via-gray-700"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="via-gray-600"] { --tw-gradient-via: #242424 !important; }
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced):not([data-slot="button"])[class*="bg-gradient-to-"][class*="to-gray-900"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="to-gray-800"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="to-gray-700"],
+.dark :not(a):not(button):not([role="button"]):not(.btn-enhanced)[class*="bg-gradient-to-"][class*="to-gray-600"] { --tw-gradient-to: #141414 !important; }
+
+/* Neutralize text gradients in dark mode */
+.dark .bg-clip-text.text-transparent { background-image: linear-gradient(90deg, #b3b3b3, #8f8f8f, #b3b3b3) !important; }
+
+/* Global selection/caret/link and ring-offset normalization (no blue anywhere) */
+::selection { background-color: #e5e7eb; color: #1a1a1a; }
+.dark ::selection { background-color: #2a2a2a; color: #ffffff; }
+input, textarea { caret-color: var(--ring); }
+a { color: inherit; }
+
+/* Dark: neutralize ring-offset blue utilities */
+.dark [class*="ring-offset-blue-"] { --tw-ring-offset-color: var(--border) !important; }
+
+/* Normalize browser autofill (remove blue), set proper text color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: oklch(0 0 0) !important; /* black in light theme */
+  caret-color: oklch(0 0 0) !important;
+  transition: background-color 9999s ease-out 0s;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  box-shadow: 0 0 0px 1000px #ffffff inset !important;
+}
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill,
+.dark select:-webkit-autofill {
+  -webkit-text-fill-color: #ffffff !important; /* white in dark theme */
+  caret-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset !important;
+  box-shadow: 0 0 0px 1000px #0a0a0a inset !important;
+}
+
+/* Career Map: акцентные цвета */
+.career-progress-track-white { background-color: var(--accent-primary); border-radius: 9999px; height: 12px; }
+.dark .career-progress-track-white { background-color: var(--accent-primary); }
+.career-progress-fill-white { background-color: var(--accent-secondary); border-radius: 9999px; height: 12px; }
+.dark .career-progress-fill-white { background-color: var(--accent-secondary); }
+.career-badge-white { color: #ffffff; background-color: var(--accent-primary); border-radius: 9999px; padding: 2px 8px; font-size: 12px; }
+.dark .career-badge-white { color: #ffffff; background-color: var(--accent-primary); }
+
+/* Force override bluish gray hex (#6b7280) to accent colors */
+[style*="#6b7280"], [style*="#6B7280"] {
+  color: var(--accent-primary) !important;
+  fill: var(--accent-primary) !important;
+  stroke: var(--accent-primary) !important;
+}
+:not(.dark) [class*="bg-\[#0ea5e9\]"], :not(.dark) [class*="bg-\[#3b82f6\]"], :not(.dark) [class*="bg-\[#2563eb\]"], :not(.dark) [class*="bg-\[#10b981\]"], :not(.dark) [class*="bg-\[#06b6d4\]"] { background-color: var(--accent-primary) !important; }
+:not(.dark) [class*="text-\[#0ea5e9\]"], :not(.dark) [class*="text-\[#3b82f6\]"], :not(.dark) [class*="text-\[#2563eb\]"], :not(.dark) [class*="text-\[#10b981\]"], :not(.dark) [class*="text-\[#06b6d4\]"] { color: #ffffff !important; }
+.dark [class*="bg-\[#0ea5e9\]"], .dark [class*="bg-\[#3b82f6\]"], .dark [class*="bg-\[#2563eb\]"], .dark [class*="bg-\[#10b981\]"], .dark [class*="bg-\[#06b6d4\]"] { background-color: var(--muted) !important; }
+.dark [class*="text-\[#0ea5e9\]"], .dark [class*="text-\[#3b82f6\]"], .dark [class*="text-\[#2563eb\]"], .dark [class*="text-\[#10b981\]"], .dark [class*="text-\[#06b6d4\]"] { color: var(--foreground) !important; }
+:not(.dark) [class*="bg-\[#6b7280\]"], :not(.dark) [class*="bg-\[#6B7280\]"] { background-color: var(--accent-primary) !important; }
+:not(.dark) [class*="text-\[#6b7280\]"], :not(.dark) [class*="text-\[#6B7280\]"] { color: #ffffff !important; }
+:not(.dark) [class*="border-\[#6b7280\]"], :not(.dark) [class*="border-\[#6B7280\]"] { border-color: var(--accent-primary) !important; }
+:not(.dark) [class*="ring-\[#6b7280\]"], :not(.dark) [class*="ring-\[#6B7280\]"] { --tw-ring-color: var(--accent-primary) !important; }
+:not(.dark) [class*="from-\[#6b7280\]"], :not(.dark) [class*="from-\[#6B7280\]"] { --tw-gradient-from: var(--accent-primary) !important; }
+:not(.dark) [class*="via-\[#6b7280\]"], :not(.dark) [class*="via-\[#6B7280\]"] { --tw-gradient-via: var(--accent-secondary) !important; }
+:not(.dark) [class*="to-\[#6b7280\]"], :not(.dark) [class*="to-\[#6B7280\]"] { --tw-gradient-to: var(--accent-primary) !important; }
+
+/* Dark theme: ensure gray/slate text utilities render white for readability (account/profile areas) */
+.dark [class*="text-slate-"],
+.dark [class*="text-gray-"] {
+  color: oklch(0.985 0 0) !important; /* white */
+}
+
+/* Акцентные цвета для использования в компонентах */
+.text-accent-primary { color: var(--accent-primary) !important; }
+.bg-accent-primary { background-color: var(--accent-primary) !important; }
+.border-accent-primary { border-color: var(--accent-primary) !important; }
+.ring-accent-primary { --tw-ring-color: var(--accent-primary) !important; }
+
+.text-accent-secondary { color: var(--accent-secondary) !important; }
+.bg-accent-secondary { background-color: var(--accent-secondary) !important; }
+.border-accent-secondary { border-color: var(--accent-secondary) !important; }
+.ring-accent-secondary { --tw-ring-color: var(--accent-secondary) !important; }
+
+/* Hover состояния для акцентных цветов */
+.hover\:bg-accent-primary:hover { background-color: var(--accent-primary) !important; }
+.hover\:text-accent-primary:hover { color: var(--accent-primary) !important; }
+.hover\:bg-accent-secondary:hover { background-color: var(--accent-secondary) !important; }
+.hover\:text-accent-secondary:hover { color: var(--accent-secondary) !important; }
